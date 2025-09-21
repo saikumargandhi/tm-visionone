@@ -1,5 +1,9 @@
 # tm-visionone
 
+[![PyPI version](https://img.shields.io/pypi/v/tm-visionone.svg)](https://pypi.org/project/tm-visionone/)
+[![Python versions](https://img.shields.io/pypi/pyversions/tm-visionone.svg)](https://pypi.org/project/tm-visionone/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A Python client for the [Trend Micro Vision One API v3](https://automation.trendmicro.com/xdr/api-v3/).
 
 This package helps you integrate with Trend Micro Vision One (XDR) services — especially **Suspicious Object List** and **Connectivity health check** APIs — with clean, consistent responses and retry handling.
