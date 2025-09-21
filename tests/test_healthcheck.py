@@ -1,17 +1,18 @@
 from tm_visionone import VisionOneClient
 
-# ⚠️ Replace with your real API key for testing
-API_KEY = "api_key_here"
+API_KEY = "<YOUR_API_KEY>"
 
 def test_healthcheck_success():
     client = VisionOneClient(api_key=API_KEY, region="us")
     result = client.healthcheck()
-    assert "connectivity" in result
-    assert isinstance(result["connectivity"], bool)
-    print("Healthcheck result:", result)
+    assert result["success"] is True
+    assert result["data"]["connectivity"] is True
+    assert result["data"]["status"] == "available"
+
 
 def test_healthcheck_invalid_key():
     client = VisionOneClient(api_key="FAKEKEY", region="us")
     result = client.healthcheck()
-    assert result["connectivity"] is False
-    print("Invalid key result:", result)
+    assert result["success"] is False
+    assert result["error"] is not None
+    assert "invalid" in result["error"]["message"].lower()

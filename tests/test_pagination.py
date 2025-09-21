@@ -1,21 +1,17 @@
 from tm_visionone import VisionOneClient
 
-API_KEY = "api_key_here"
+API_KEY = "<YOUR_API_KEY>"
 
 def test_pagination():
     client = VisionOneClient(api_key=API_KEY, region="us")
 
-    # Fetch first page
-    result = client.get_suspicious_objects(top=50)
-    assert isinstance(result, dict)
-    assert "items" in result
-    print("First page count:", len(result["items"]))
+    # First page
+    result = client.get_suspicious_objects(top=5)
+    assert result["success"] is True
+    assert "items" in result["data"]
 
-    # If there is a nextLink, fetch next page
-    if "nextLink" in result:
-        next_page = client.get_next_page(result["nextLink"])
-        assert isinstance(next_page, dict)
-        assert "items" in next_page
-        print("Next page count:", len(next_page["items"]))
-    else:
-        print("No pagination available, single page only.")
+    next_link = result["data"].get("nextLink")
+    if next_link:
+        next_page = client.get_next_page(next_link)
+        assert next_page["success"] is True
+        assert "items" in next_page["data"]

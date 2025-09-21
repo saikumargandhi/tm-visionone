@@ -1,19 +1,18 @@
 from tm_visionone import VisionOneClient
 
-API_KEY = "api_key_here"
+API_KEY = "<YOUR_API_KEY>"
 
-def test_list_default():
+def test_list_objects_default():
     client = VisionOneClient(api_key=API_KEY, region="us")
-    result = client.get_suspicious_objects()
-    assert isinstance(result, dict)
+    result = client.get_suspicious_objects(top=10)
     print("List result (default):", result)
+    assert result["success"] is True
+    assert "items" in result["data"]
 
-def test_list_with_filter():
+
+def test_list_objects_with_filter():
     client = VisionOneClient(api_key=API_KEY, region="us")
-    result = client.get_suspicious_objects(
-        filter_expr="type eq 'url' AND riskLevel eq 'high'",
-        top=50,
-        order_by="lastModifiedDateTime desc"
-    )
-    assert isinstance(result, dict)
+    result = client.get_suspicious_objects(top=10, filter_expr="type eq 'url'")
     print("List result (with filter):", result)
+    assert result["success"] is True
+    assert "items" in result["data"]
