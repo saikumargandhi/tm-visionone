@@ -1,95 +1,86 @@
 # tm-visionone
 
-[![PyPI version](https://img.shields.io/pypi/v/tm-visionone.svg)](https://pypi.org/project/tm-visionone/)
-[![Python versions](https://img.shields.io/pypi/pyversions/tm-visionone.svg)](https://pypi.org/project/tm-visionone/)
-[![License](https://img.shields.io/github/license/saikumargandhi/tm-visionone.svg)](LICENSE)
+A Python client for the [Trend Micro Vision One API v3](https://automation.trendmicro.com/xdr/api-v3/).
 
-A lightweight Python SDK for **Trend Micro Vision One** (Suspicious Objects API v3).  
-Easily upload, list, and manage suspicious objects (IOCs) using simple Python code.
+This package helps you integrate with Trend Micro Vision One (XDR) services — especially **Suspicious Object List** and **Connectivity health check** APIs — with clean, consistent responses and retry handling.
 
 ---
 
-## 🚀 Features
-
-- Upload multiple IOCs (URLs, IPs, Domains, Hashes, Emails) in one call
-- List suspicious objects with filters & ordering
-- Manual pagination support (`get_next_page`)
-- Healthcheck API to validate connectivity
-- Handles 429 rate limits with `Retry-After` headers
-- Region-aware (`us`, `eu`, `jp`, `sg`, `au`, `in`)
-- Optional logging
+## ✨ Features
+- Upload suspicious objects (IOCs: URL, IP, domain, file hashes, email).
+- List suspicious objects with filters, ordering, and pagination support.
+- Get next page of results using `nextLink`.
+- Health check API for connectivity & token validation.
+- Handles **rate limiting (429)** and transient errors (**500, 502, 503, 504**) with retries.
+- Region-aware (`us`, `eu`, `jp`, `sg`, `au`, `in`).
+- Optional logging.
 
 ---
 
 ## 📦 Installation
 
+### From PyPI (after release):
 ```bash
 pip install tm-visionone
 ```
 
+### From TestPyPI (for testing):
+```bash
+pip install -i https://test.pypi.org/simple/ tm-visionone
+```
+
 ---
 
-## ⚡ Quick Usage
+## 🚀 Quick Usage
 
 ```python
 from tm_visionone import VisionOneClient
 
-# Initialize client
-client = VisionOneClient(api_key="YOUR_API_KEY", region="us")
+API_KEY = "YOUR_API_KEY"
+
+client = VisionOneClient(api_key=API_KEY, region="us", enable_logging=True)
 
 # Healthcheck
 print(client.healthcheck())
+# -> {'success': True, 'data': {'connectivity': True, 'status': 'available', 'message': 'API reachable and token valid'}, 'error': None}
 
-# Upload IOCs
+# Upload suspicious objects
 objects = [
-    {"url": "http://badsite.com", "description": "Malicious test site", "scanAction": "block"},
-    {"ip": "45.77.23.11", "description": "Suspicious IP", "scanAction": "log"},
+    {"url": "http://malicious.example", "description": "Test URL", "scanAction": "log", "riskLevel": "high"}
 ]
 print(client.upload_suspicious_objects(objects))
+# -> {'success': True, 'data': [{'status': 201}], 'error': None}
 
-# List suspicious objects (first page, up to 50 items)
-result = client.get_suspicious_objects(top=50)
-print(result["items"])
+# List suspicious objects
+result = client.get_suspicious_objects(top=10)
+print(result["data"]["items"])  # Paginated results
 ```
 
 ---
 
-## 🔧 Advanced Usage
-
-### Filtering & Ordering
-
-```python
-# List only high-risk URLs
-result = client.get_suspicious_objects(
-    filter_expr="type eq 'url' AND riskLevel eq 'high'",
-    order_by="lastModifiedDateTime desc",
-    top=50
-)
-for item in result.get("items", []):
-    print(item)
-```
+## 📖 Advanced Usage
 
 ### Pagination
-
 ```python
-# Get first page
-result = client.get_suspicious_objects(top=50)
-all_items = result.get("items", [])
+result = client.get_suspicious_objects(top=10)
+print(result["data"]["items"])
 
-# Fetch next pages manually
-while "nextLink" in result:
-    result = client.get_next_page(result["nextLink"])
-    all_items.extend(result.get("items", []))
+if "nextLink" in result["data"]:
+    next_page = client.get_next_page(result["data"]["nextLink"])
+    print(next_page["data"]["items"])
+```
 
-print(f"Total IOCs collected: {len(all_items)}")
+### Logging
+Enable built-in logging:
+```python
+client = VisionOneClient(api_key=API_KEY, region="us", enable_logging=True)
 ```
 
 ---
 
-## 🧪 Testing
+## 🧪 Running Tests
 
-Clone the repo and run the test suite:
-
+Clone the repo and install dev dependencies:
 ```bash
 git clone https://github.com/saikumargandhi/tm-visionone.git
 cd tm-visionone
@@ -99,17 +90,13 @@ pytest -s tests/
 
 ---
 
-## 📜 License
+## ⚖️ License
 
-MIT © 2025 Sai Kumar Gandhi
+This project is licensed under the MIT License.
 
 ---
 
 ## 🙏 Attribution
 
-If you use `tm-visionone` in your project, please retain the following notice:
-
-```
-Copyright (c) 2025 Sai Kumar Gandhi
-Licensed under the MIT License (see LICENSE file).
-```
+- Built by [Sai Kumar Gandhi](https://github.com/saikumargandhi)
+- Powered by [Trend Micro Vision One APIs](https://automation.trendmicro.com/xdr/api-v3/)

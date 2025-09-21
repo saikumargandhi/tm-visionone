@@ -46,7 +46,6 @@ class VisionOneClient:
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "User-Agent": "tm-visionone/0.1.0",
         }
 
         self.logger = logging.getLogger("tm-visionone")
