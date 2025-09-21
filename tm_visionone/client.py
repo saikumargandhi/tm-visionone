@@ -2,7 +2,7 @@ import requests
 import time
 import logging
 from typing import List, Dict, Optional
-
+from urllib.parse import urlparse
 
 class VisionOneClient:
     """
@@ -30,13 +30,12 @@ class VisionOneClient:
         self,
         api_key: str,
         region: str = "us",
-        base_url: Optional[str] = None,
         enable_logging: bool = False,
         timeout: int = 30,
         max_retries: int = 5,
     ):
         # Base URL from region map unless explicitly overridden
-        self.base_url = base_url or self.REGION_MAP.get(region, self.REGION_MAP["us"])
+        self.base_url = self.REGION_MAP.get(region, self.REGION_MAP["us"])
         self.api_key = api_key
         self.enable_logging = enable_logging
         self.timeout = timeout
@@ -170,6 +169,9 @@ class VisionOneClient:
 
     def get_next_page(self, next_link: str) -> dict:
         """Retrieve next page of suspicious objects using nextLink from a previous response."""
-        if not next_link or not isinstance(next_link, str):
-            return {"error": "invalid_input", "message": "next_link must be a valid string URL"}
-        return self._request("GET", next_link.replace(self.base_url, ""))
+        if not next_link:
+            return {"error": "invalid_input", "message": "next_link must not be empty"}
+        parsed = urlparse(next_link)
+        # If absolute URL from API, use path+query
+        endpoint = parsed.path + ("?" + parsed.query if parsed.query else "") if parsed.netloc else next_link
+        return self._request("GET", endpoint)
