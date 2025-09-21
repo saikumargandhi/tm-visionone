@@ -7,17 +7,15 @@ name = "tm-visionone"
 version = "0.1.0"
 description = "Python SDK for Trend Micro Vision One"
 readme = "README.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.8"
 authors = [
     { name = "Sai Kumar Gandhi", email = "saikumargandhi33@gmail.com" }
 ]
 keywords = ["trendmicro", "visionone", "xdr", "security", "sdk", "ioc", "trend micro"]
 classifiers = [
-    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Topic :: Security",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
 ]
 
