@@ -3,6 +3,8 @@
 [![PyPI version](https://img.shields.io/pypi/v/tm-visionone.svg)](https://pypi.org/project/tm-visionone/)
 [![Python versions](https://img.shields.io/pypi/pyversions/tm-visionone.svg)](https://pypi.org/project/tm-visionone/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/tm-visionone?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=BRIGHTGREEN&left_text=Downloads)](https://pepy.tech/projects/tm-visionone)
+
 
 A Python client for the [Trend Micro Vision One API v3](https://automation.trendmicro.com/xdr/api-v3/).
 
